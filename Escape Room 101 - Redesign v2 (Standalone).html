@@ -264,6 +264,9 @@
     padding:0 28px;
     position:relative;z-index:1;
   }
+  /* Skip navigation */
+  .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+  .skip-link:focus{position:fixed;top:0;left:0;width:auto;height:auto;padding:12px 24px;background:var(--red);color:#fff;font-weight:700;font-size:15px;z-index:9999;border-radius:0 0 8px 0;outline:3px solid #fff;text-decoration:none}
   .hero-kicker{
     color:#fff;font-weight:700;letter-spacing:3px;
     font-size:12.5px;text-transform:uppercase;margin-bottom:20px;
@@ -274,7 +277,7 @@
   }
   .hero-kicker::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red)}
   .hero h1{
-    font-size:clamp(42px,6.2vw,82px);
+    font-size:clamp(30px,3.8vw,56px);
     color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.35);
     line-height:1.06;font-weight:900;letter-spacing:-1.5px;
     margin:0 0 24px;
@@ -449,26 +452,33 @@
     overflow:visible;
     aspect-ratio:5/4;
   }
-  .about-media .video{
+  .about-carousel{
     width:100%;height:100%;
-    background:var(--surface-2);
     border-radius:24px;
-    display:grid;place-items:center;
-    position:relative;overflow:hidden;
-    background-image:linear-gradient(120deg, rgba(0,0,0,.55), rgba(0,0,0,.25)), url("https://escroom101.com/Gallery/COLLAGE1.jpg");
-    background-size:cover;background-position:center;
+    overflow:hidden;
+    position:relative;
   }
-  .play-btn{
-    width:80px;height:80px;border-radius:50%;
-    background:var(--red);color:#fff;
-    display:grid;place-items:center;
-    box-shadow:0 16px 40px -8px rgba(183,3,3,.55), 0 0 0 10px rgba(255,255,255,.15);
-    transition:transform .2s var(--ease), box-shadow .2s var(--ease);
-    cursor:pointer;
+  .carousel-track{
+    display:flex;
+    width:100%;height:100%;
+    transition:transform .65s cubic-bezier(.4,0,.2,1);
   }
-  .play-btn:hover{transform:scale(1.06);box-shadow:0 20px 48px -8px rgba(183,3,3,.65), 0 0 0 14px rgba(255,255,255,.2)}
-  .play-btn:focus-visible{outline:3px solid #fff;outline-offset:6px}
-  .play-btn svg{width:28px;height:28px;fill:#fff;margin-left:4px}
+  .carousel-slide{
+    min-width:100%;height:100%;flex-shrink:0;
+  }
+  .carousel-slide img{
+    width:100%;height:100%;object-fit:cover;display:block;
+  }
+  .carousel-dots{
+    position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+    display:flex;gap:8px;z-index:2;
+  }
+  .carousel-dot{
+    width:8px;height:8px;border-radius:50%;padding:0;border:none;cursor:pointer;
+    background:rgba(255,255,255,.45);
+    transition:background .2s,transform .2s;
+  }
+  .carousel-dot.active{background:#fff;transform:scale(1.3);}
   .stat-card{
     position:absolute;background:#fff;border-radius:14px;
     padding:14px 18px;box-shadow:var(--shadow-lg);
@@ -687,16 +697,13 @@
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 
 <!-- ============== HEADER ============== -->
 <header class="header" id="header">
   <nav class="navbar" aria-label="Primary">
     <a class="brand" href="#" aria-label="Escape Room 101 home">
       <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAL8AAAAyCAMAAAA6GvoyAAADAFBMVEVMaXG3AgL///+3AgL///+2AgK3AgK3AwO3AwO3AwO3AwO3AwO3AwO3AwO3AwP///+3AwO3AwP///////////+3AgL///////////////////////////////////////+3AwO3AwP///8WFha3AwO3AwO3AwO3AgK3AwP///+3AwP///+3AwP///+3AgK3AwP///+3AgL///////////////////////////////////////////+3AwO3AwP///////+3AwP///////+3AgK3AwP///////////+3AwP//////////////v63AwO3AwO3AwP///////////////////////////+4AgL///+3AwO3AwP///+3AwP///+3AwP///////////+3AwO3AwP///////+3AwO3AwO3AgK3AwP///////+3AwO3AwP///+3AwO3AwP///////////////+3AwP///+3AQG3AwP///////////+1AgL///+1AgL///////+3AwP///+4AgK3AwP///////+3AgL///////////////////////+3AwP///////+3AwP///////////////+3AwO3AwO3AwP///+3AwP///+3AwO3AwP///+3AwP///////////+3AwP///////+3AgK3AwP///////////+3AwP///+3AgL///////9YDw+3AwP///+uAACsAAC4AgKxAACtAAC3AwMUEhIWFBROVVWmAAD///8WFhZJZGSvAACJqanH5+eIrq7Eysq+AAD4/PzNX1+3JSWoAACsAAC3AwP///+xAAB/GRu1AAC+AACCFxm8ERFQUFBtAABrAAC7Dw+rCQmGhYWrCAnAAACmBAWwAAC+jo+6BAS5AADDmJnGnZ7AxMTPq6xhAAC7iImrCAhST0/AkpPBlZbvyMiIiYnIHBz22tqJmJiyZmb/+PisCgvbycr01tZtDA2TSkvI0NDY9fSucXLXvLy6kJHS4uL07u55AwWAExfNF+OvAAAAzHRSTlMAMZi2Qwzx+RUrFtebvPIB+qjr+QYifJnuR0wnBLDR126sFPRp/qAF98+z8Iyfr74YVjnnK3LdIX+6QeTGpaJJ9Igxwwl6Cw3U9emRhgPd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" alt="Escape Room 101">
-      <span class="brand-text">
-        <span class="er">ESCAPE ROOM</span>
-        <span class="num">101</span>
-      </span>
     </a>
 
     <div class="nav" role="list">
@@ -743,6 +750,7 @@
   </div>
 </nav>
 
+<main id="main-content">
 <!-- ============== HERO ============== -->
 <section class="hero" aria-label="Hero">
   <div class="hero-bg" aria-hidden="true">
@@ -752,7 +760,6 @@
     <div class="grain"></div>
   </div>
   <div class="hero-inner">
-    <div class="hero-kicker">Welcome to Escape Room 101</div>
     <h1>
       All Our Games Are<br>
       <span class="accent">Private</span><br>
@@ -1005,10 +1012,19 @@
         <a href="#booking" class="btn btn-primary">Book Your Room</a>
       </div>
       <div class="about-media">
-        <div class="video">
-          <button class="play-btn" aria-label="Play video">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </button>
+        <div class="about-carousel">
+          <div class="carousel-track" id="aboutCarouselTrack">
+            <div class="carousel-slide"><img src="https://escroom101.com/Gallery/COLLAGE1.jpg" alt="Escape Room 101"></div>
+            <div class="carousel-slide"><img src="https://escroom101.com/GameRooms/38f8f673-a0b7-4f0d-a117-5743656834cf1.jpg" alt="Escape Room 101"></div>
+            <div class="carousel-slide"><img src="https://escroom101.com/GameRooms/d08aba02-3d8c-46b1-a5f8-b6776a8450e8.jpg" alt="Escape Room 101"></div>
+            <div class="carousel-slide"><img src="https://escroom101.com/GameRooms/WhatsApp-Image-2020-07-17-at-10_41_59-AM.jpeg" alt="Escape Room 101"></div>
+          </div>
+          <div class="carousel-dots" id="aboutCarouselDots">
+            <button class="carousel-dot active" aria-label="Slide 1"></button>
+            <button class="carousel-dot" aria-label="Slide 2"></button>
+            <button class="carousel-dot" aria-label="Slide 3"></button>
+            <button class="carousel-dot" aria-label="Slide 4"></button>
+          </div>
         </div>
         <div class="stat-card stat-tr">
           <div class="k">2–8</div>
@@ -1098,18 +1114,18 @@
     <form class="booking-card" onsubmit="event.preventDefault(); alert('Thanks! We\'ll confirm within 24 hours.')">
       <h3>Reserve Your Room</h3>
       <div class="form-grid">
-        <input class="field" type="text" placeholder="Your Name" required>
-        <input class="field" type="email" placeholder="Email Address" required>
-        <input class="field" type="tel" placeholder="Phone Number">
-        <select class="field" required>
+        <input class="field" type="text" id="f-name" placeholder="Your Name" required aria-label="Your Name" autocomplete="name">
+        <input class="field" type="email" id="f-email" placeholder="Email Address" required aria-label="Email Address" autocomplete="email">
+        <input class="field" type="tel" id="f-phone" placeholder="Phone Number" aria-label="Phone Number" autocomplete="tel">
+        <select class="field" id="f-room" required aria-label="Select a room">
           <option value="" disabled selected>Select Room</option>
           <option>Hangover II</option>
           <option>Murder Mystery</option>
           <option>The Magician's Apprentice</option>
         </select>
-        <input class="field" type="date" required>
-        <input class="field" type="time" required>
-        <textarea class="field full" placeholder="Special requests or questions..."></textarea>
+        <input class="field" type="date" id="f-date" required aria-label="Preferred date">
+        <input class="field" type="time" id="f-time" required aria-label="Preferred time">
+        <textarea class="field full" id="f-notes" placeholder="Special requests or questions..." aria-label="Special requests or questions"></textarea>
       </div>
       <button type="submit" class="btn btn-primary btn-confirm">Confirm Booking</button>
       <div class="small">You'll receive a confirmation email within 24 hours</div>
@@ -1132,13 +1148,13 @@
 </section>
 
 <!-- ============== FOOTER ============== -->
+</main>
 <footer>
   <div class="container">
     <div class="foot-grid">
       <div class="foot">
         <div class="brand-foot">
           <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAL8AAAAyCAMAAAA6GvoyAAADAFBMVEVMaXG3AgL///+3AgL///+2AgK3AgK3AwO3AwO3AwO3AwO3AwO3AwO3AwO3AwP///+3AwO3AwP///////////+3AgL///////////////////////////////////////+3AwO3AwP///8WFha3AwO3AwO3AwO3AgK3AwP///+3AwP///+3AwP///+3AgK3AwP///+3AgL///////////////////////////////////////////+3AwO3AwP///////+3AwP///////+3AgK3AwP///////////+3AwP//////////////v63AwO3AwO3AwP///////////////////////////+4AgL///+3AwO3AwP///+3AwP///+3AwP///////////+3AwO3AwP///////+3AwO3AwO3AgK3AwP///////+3AwO3AwP///+3AwO3AwP///////////////+3AwP///+3AQG3AwP///////////+1AgL///+1AgL///////+3AwP///+4AgK3AwP///////+3AgL///////////////////////+3AwP///////+3AwP///////////////+3AwO3AwO3AwP///+3AwP///+3AwO3AwP///+3AwP///////////+3AwP///////+3AgK3AwP///////////+3AwP///+3AgL///////9YDw+3AwP///+uAACsAAC4AgKxAACtAAC3AwMUEhIWFBROVVWmAAD///8WFhZJZGSvAACJqanH5+eIrq7Eysq+AAD4/PzNX1+3JSWoAACsAAC3AwP///+xAAB/GRu1AAC+AACCFxm8ERFQUFBtAABrAAC7Dw+rCQmGhYWrCAnAAACmBAWwAAC+jo+6BAS5AADDmJnGnZ7AxMTPq6xhAAC7iImrCAhST0/AkpPBlZbvyMiIiYnIHBz22tqJmJiyZmb/+PisCgvbycr01tZtDA2TSkvI0NDY9fSucXLXvLy6kJHS4uL07u55AwWAExfNF+OvAAAAzHRSTlMAMZi2Qwzx+RUrFtebvPIB+qjr+QYifJnuR0wnBLDR126sFPRp/qAF98+z8Iyfr74YVjnnK3LdIX+6QeTGpaJJ9Igxwwl6Cw3U9emRhgPd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" alt="Escape Room 101 logo">
-          <span class="brand-text"><span class="er">ESCAPE ROOM</span> <span class="num">101</span></span>
         </div>
         <p>The ultimate immersive puzzle experience. Private rooms, unforgettable challenges.</p>
         <div class="foot-social">
@@ -1238,6 +1254,22 @@
     el.classList.add('reveal');
     revealObserver.observe(el);
   });
+
+  // About section auto-carousel
+  (function(){
+    const track = document.getElementById('aboutCarouselTrack');
+    const dots = document.querySelectorAll('#aboutCarouselDots .carousel-dot');
+    let current = 0;
+    const total = dots.length;
+    function goTo(idx) {
+      dots[current].classList.remove('active');
+      current = (idx + total) % total;
+      track.style.transform = 'translateX(-' + (current * 100) + '%)';
+      dots[current].classList.add('active');
+    }
+    dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+    setInterval(() => goTo(current + 1), 3500);
+  })();
 </script>
 </body>
 </html>
