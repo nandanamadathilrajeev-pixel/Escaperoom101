@@ -278,7 +278,7 @@
   }
   .hero-kicker::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red)}
   .hero h1{
-    font-size:clamp(30px,3.8vw,56px);
+    font-size:clamp(36px,4.6vw,66px);
     color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.35);
     line-height:1.06;font-weight:900;letter-spacing:-1.5px;
     margin:0 0 24px;
@@ -453,33 +453,44 @@
     overflow:visible;
     aspect-ratio:5/4;
   }
-  .about-carousel{
+  .about-static-img{
     width:100%;height:100%;
     border-radius:24px;
     overflow:hidden;
-    position:relative;
   }
-  .carousel-track{
-    display:flex;
-    width:100%;height:100%;
-    transition:transform .65s cubic-bezier(.4,0,.2,1);
-  }
-  .carousel-slide{
-    min-width:100%;height:100%;flex-shrink:0;
-  }
-  .carousel-slide img{
+  .about-static-img img{
     width:100%;height:100%;object-fit:cover;display:block;
   }
-  .carousel-dots{
-    position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
-    display:flex;gap:8px;z-index:2;
+
+  /* ===================== PARTICIPANTS GALLERY ===================== */
+  .gallery{background:var(--surface);}
+  .gallery-grid{
+    columns:4;column-gap:16px;
   }
-  .carousel-dot{
-    width:8px;height:8px;border-radius:50%;padding:0;border:none;cursor:pointer;
-    background:rgba(255,255,255,.45);
-    transition:background .2s,transform .2s;
+  .gallery-item{
+    break-inside:avoid;margin-bottom:16px;
+    border-radius:14px;overflow:hidden;
+    position:relative;cursor:pointer;
   }
-  .carousel-dot.active{background:#fff;transform:scale(1.3);}
+  .gallery-item img{
+    width:100%;display:block;
+    transition:transform .45s var(--ease);
+  }
+  .gallery-item::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(to top, rgba(11,19,32,.55) 0%, transparent 55%);
+    opacity:0;transition:opacity .3s var(--ease);
+  }
+  .gallery-item:hover img{transform:scale(1.06)}
+  .gallery-item:hover::after{opacity:1}
+  .gallery-caption{
+    position:absolute;bottom:14px;left:14px;right:14px;
+    color:#fff;font-size:13px;font-weight:600;letter-spacing:.2px;
+    opacity:0;transform:translateY(6px);
+    transition:opacity .3s var(--ease),transform .3s var(--ease);
+    z-index:1;
+  }
+  .gallery-item:hover .gallery-caption{opacity:1;transform:translateY(0)}
   .stat-card{
     position:absolute;background:#fff;border-radius:14px;
     padding:14px 18px;box-shadow:var(--shadow-lg);
@@ -682,14 +693,20 @@
     .stat-bl{bottom:-12px;left:-12px}
     .stat-card{padding:10px 14px}
     .stat-card .k{font-size:20px}
+    .gallery-grid{columns:2}
   }
 
   /* Small mobile */
   @media (max-width: 420px){
-    .hero h1{font-size:clamp(34px,9vw,46px)}
+    .hero h1{font-size:clamp(38px,9vw,54px)}
     .foot-grid{grid-template-columns:1fr}
     .booking-quick{grid-template-columns:1fr 1fr}
     .reviews-grid{grid-template-columns:1fr}
+    .gallery-grid{columns:1}
+  }
+
+  @media (max-width:960px){
+    .gallery-grid{columns:2}
   }
 
   /* ===================== REVEAL ===================== */
@@ -712,6 +729,7 @@
       <a href="#events" role="listitem">Events</a>
       <a href="#about" role="listitem">About</a>
       <a href="#reviews" role="listitem">Reviews</a>
+      <a href="#gallery" role="listitem">Gallery</a>
     </div>
 
     <div class="nav-right">
@@ -786,13 +804,6 @@
         Purchase Gift Card
       </a>
     </div>
-
-    <div class="hero-social" aria-label="Social links">
-      <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 10-11.6 9.9V15h-2.5v-3h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.7l-.4 3h-2.3v6.9A10 10 0 0022 12z"/></svg></a>
-      <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.8-.2-2.2-.4a3.6 3.6 0 01-1.4-.9 3.6 3.6 0 01-.9-1.4c-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 4.8a5 5 0 100 10 5 5 0 000-10zm6.4-.2a1.2 1.2 0 110-2.4 1.2 1.2 0 010 2.4zM12 8.8a3.2 3.2 0 110 6.4 3.2 3.2 0 010-6.4z"/></svg></a>
-      <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24"><path d="M22 5.8a8.4 8.4 0 01-2.4.7 4.2 4.2 0 001.8-2.3c-.8.5-1.7.8-2.6 1a4.1 4.1 0 00-7 3.7A11.7 11.7 0 013.4 4.6a4.1 4.1 0 001.3 5.5 4.1 4.1 0 01-1.9-.5v.1a4.1 4.1 0 003.3 4 4.2 4.2 0 01-1.9.1 4.1 4.1 0 003.8 2.9A8.3 8.3 0 012 18.4a11.7 11.7 0 006.3 1.8c7.6 0 11.7-6.3 11.7-11.7v-.5A8.3 8.3 0 0022 5.8z"/></svg></a>
-    </div>
-
     <div class="trust-strip">
       <div class="lbl">Trusted by thousands</div>
       <div class="row">
@@ -1013,19 +1024,8 @@
         <a href="#booking" class="btn btn-primary">Book Your Room</a>
       </div>
       <div class="about-media">
-        <div class="about-carousel">
-          <div class="carousel-track" id="aboutCarouselTrack">
-            <div class="carousel-slide"><img src="https://escroom101.com/Gallery/COLLAGE1.jpg" alt="Escape Room 101"></div>
-            <div class="carousel-slide"><img src="https://escroom101.com/GameRooms/38f8f673-a0b7-4f0d-a117-5743656834cf1.jpg" alt="Escape Room 101"></div>
-            <div class="carousel-slide"><img src="https://escroom101.com/GameRooms/d08aba02-3d8c-46b1-a5f8-b6776a8450e8.jpg" alt="Escape Room 101"></div>
-            <div class="carousel-slide"><img src="https://escroom101.com/GameRooms/WhatsApp-Image-2020-07-17-at-10_41_59-AM.jpeg" alt="Escape Room 101"></div>
-          </div>
-          <div class="carousel-dots" id="aboutCarouselDots">
-            <button class="carousel-dot active" aria-label="Slide 1"></button>
-            <button class="carousel-dot" aria-label="Slide 2"></button>
-            <button class="carousel-dot" aria-label="Slide 3"></button>
-            <button class="carousel-dot" aria-label="Slide 4"></button>
-          </div>
+        <div class="about-static-img">
+          <img src="https://escroom101.com/Gallery/COLLAGE1.jpg" alt="Escape Room 101 — immersive game rooms">
         </div>
         <div class="stat-card stat-tr">
           <div class="k">2–8</div>
@@ -1097,6 +1097,51 @@
       <a href="#">Google</a>
       <a href="#" style="color:var(--red)">Yelp</a>
       <a href="#">TripAdvisor</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============== PARTICIPANTS GALLERY ============== -->
+<section class="section gallery" id="gallery">
+  <div class="container">
+    <div class="section-head">
+      <span class="pill-tag">Memories Made Here</span>
+      <h2>Happy Escapees</h2>
+      <p>Real moments from real adventurers — teams who cracked the code and made memories that last.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="https://escroom101.com/GameRooms/38f8f673-a0b7-4f0d-a117-5743656834cf1.jpg" alt="Group celebrating after escaping">
+        <span class="gallery-caption">The Vault — Team escaped with 4 min to spare!</span>
+      </div>
+      <div class="gallery-item">
+        <img src="https://escroom101.com/GameRooms/d08aba02-3d8c-46b1-a5f8-b6776a8450e8.jpg" alt="Friends solving puzzles together">
+        <span class="gallery-caption">Friends Night Out</span>
+      </div>
+      <div class="gallery-item">
+        <img src="https://escroom101.com/GameRooms/WhatsApp-Image-2020-07-17-at-10_41_59-AM.jpeg" alt="Team celebrating victory">
+        <span class="gallery-caption">Corporate team-building win!</span>
+      </div>
+      <div class="gallery-item">
+        <img src="https://escroom101.com/Gallery/COLLAGE1.jpg" alt="Escape room collage of happy participants">
+        <span class="gallery-caption">So many memories made</span>
+      </div>
+      <div class="gallery-item">
+        <img src="https://escroom101.com/GameRooms/38f8f673-a0b7-4f0d-a117-5743656834cf1.jpg" alt="Birthday celebration escape room">
+        <span class="gallery-caption">Best birthday ever!</span>
+      </div>
+      <div class="gallery-item">
+        <img src="https://escroom101.com/GameRooms/d08aba02-3d8c-46b1-a5f8-b6776a8450e8.jpg" alt="Team photo after escape room">
+        <span class="gallery-caption">They nailed it — 100% escape rate!</span>
+      </div>
+      <div class="gallery-item">
+        <img src="https://escroom101.com/GameRooms/WhatsApp-Image-2020-07-17-at-10_41_59-AM.jpeg" alt="Family escape room adventure">
+        <span class="gallery-caption">Family adventure night</span>
+      </div>
+      <div class="gallery-item">
+        <img src="https://escroom101.com/Gallery/COLLAGE1.jpg" alt="Group photo at escape room">
+        <span class="gallery-caption">Epic squad goals</span>
+      </div>
     </div>
   </div>
 </section>
@@ -1256,21 +1301,6 @@
     revealObserver.observe(el);
   });
 
-  // About section auto-carousel
-  (function(){
-    const track = document.getElementById('aboutCarouselTrack');
-    const dots = document.querySelectorAll('#aboutCarouselDots .carousel-dot');
-    let current = 0;
-    const total = dots.length;
-    function goTo(idx) {
-      dots[current].classList.remove('active');
-      current = (idx + total) % total;
-      track.style.transform = 'translateX(-' + (current * 100) + '%)';
-      dots[current].classList.add('active');
-    }
-    dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
-    setInterval(() => goTo(current + 1), 3500);
-  })();
 </script>
 </body>
 </html>
